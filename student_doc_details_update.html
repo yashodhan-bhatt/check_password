@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Password Protected Access</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 30px;
+        background-color: #f2f2f2;
+      }
+      .container {
+        background: white;
+        max-width: 400px;
+        margin: auto;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
+      input[type="password"],
+      button {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Enter Password to Proceed</h2>
+      <form id="accessForm" method="POST">
+        <label>Password:</label>
+        <input type="password" name="password" required />
+        <button type="submit">Submit</button>
+      </form>
+      <div id="error" style="color: red; display: none">
+        Error: Record ID not found.
+      </div>
+    </div>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const recordId = params.get("record_id");
+
+      if (!recordId) {
+        document.getElementById("error").style.display = "block";
+      } else {
+        const baseURL =
+          "https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZiMDYzZTA0MzY1MjY5NTUzMzUxMzci_pc";
+        const fullURL = `${baseURL}?record_id=${encodeURIComponent(recordId)}`;
+        document.getElementById("accessForm").action = fullURL;
+      }
+    </script>
+  </body>
+</html>
