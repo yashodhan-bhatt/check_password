@@ -49,6 +49,16 @@
           "https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZiMDYzZTA0MzY1MjY5NTUzMzUxMzci_pc";
         const fullURL = `${baseURL}?record_id=${encodeURIComponent(recordId)}`;
         document.getElementById("accessForm").action = fullURL;
+
+        // ✅ Add password check
+        const correctPassword = "mgpass123"; // Change this if needed
+        document.getElementById("accessForm").addEventListener("submit", function (e) {
+          const enteredPassword = document.querySelector('input[name="password"]').value;
+          if (enteredPassword !== correctPassword) {
+            e.preventDefault();
+            alert("❌ Wrong password. Please try again.");
+          }
+        });
       }
     </script>
   </body>
