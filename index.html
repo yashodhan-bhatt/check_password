@@ -1,96 +1,105 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Password Protected Access</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #f9f9f9;
-        padding: 40px;
-      }
-      .container {
-        background: #fff;
-        max-width: 420px;
-        margin: auto;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      }
-      h2 {
-        text-align: center;
-        margin-bottom: 20px;
-        color: #333;
-      }
-      input[type="password"],
-      button {
-        width: 100%;
-        padding: 14px;
-        margin: 10px 0;
-        font-size: 16px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        box-sizing: border-box;
-      }
-      button {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        cursor: pointer;
-      }
-      button:hover {
-        background-color: #0056b3;
-      }
-      .error-box {
-        display: none;
-        background-color: #ffe0e0;
-        color: #d8000c;
-        padding: 12px;
-        border: 1px solid #d8000c;
-        border-radius: 6px;
-        margin-top: 10px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h2>🔐 Enter Password to Proceed</h2>
-      <form id="accessForm" method="POST">
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="passwordField" required />
-        <button type="submit">Submit</button>
-      </form>
-      <div id="recordError" class="error-box">❌ Error: Record ID not found.</div>
-      <div id="passwordError" class="error-box">❌ Wrong password. Please try again.</div>
-    </div>
+<head>
+  <title>Password Protected Access</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      padding: 40px;
+    }
+    .container {
+      background: #fff;
+      max-width: 420px;
+      margin: auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    input[type="password"],
+    select,
+    button {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .error-box {
+      display: none;
+      background-color: #ffe0e0;
+      color: #d8000c;
+      padding: 12px;
+      border: 1px solid #d8000c;
+      border-radius: 6px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🔐 Enter Password to Proceed</h2>
+    <form id="accessForm" method="POST">
+      <label for="password">Password:</label>
+      <input type="password" name="password" id="passwordField" required />
 
-    <script>
-      const params = new URLSearchParams(window.location.search);
-      const recordId = params.get("record_id");
-      const correctPassword = "gL3#"; // ✅ Change this to your desired password
+      <label for="status">Choose Status:</label>
+      <select name="status" id="statusField" required>
+        <option value="Pending">Pending</option>
+        <option value="Complete">Complete</option>
+      </select>
 
-      const form = document.getElementById("accessForm");
-      const passwordField = document.getElementById("passwordField");
-      const passwordError = document.getElementById("passwordError");
-      const recordError = document.getElementById("recordError");
+      <button type="submit">Submit</button>
+    </form>
 
-      if (!recordId) {
-        recordError.style.display = "block";
-        form.style.display = "none";
-      } else {
-        const baseURL =
-          "https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZiMDYzZTA0MzY1MjY5NTUzMzUxMzci_pc";
-        const fullURL = `${baseURL}?record_id=${encodeURIComponent(recordId)}`;
-        form.action = fullURL;
+    <div id="recordError" class="error-box">❌ Error: Record ID not found.</div>
+    <div id="passwordError" class="error-box">❌ Wrong password. Please try again.</div>
+  </div>
 
-        form.addEventListener("submit", function (e) {
-          if (passwordField.value !== correctPassword) {
-            e.preventDefault();
-            passwordError.style.display = "block";
-          } else {
-            passwordError.style.display = "none";
-          }
-        });
-      }
-    </script>
-  </body>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const recordId = params.get("record_id");
+    const correctPassword = "gL3#"; // ✅ Change as needed
+
+    const form = document.getElementById("accessForm");
+    const passwordField = document.getElementById("passwordField");
+    const passwordError = document.getElementById("passwordError");
+    const recordError = document.getElementById("recordError");
+
+    if (!recordId) {
+      recordError.style.display = "block";
+      form.style.display = "none";
+    } else {
+      const baseURL =
+        "https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjYwNTZiMDYzZTA0MzY1MjY5NTUzMzUxMzci_pc";
+      const fullURL = `${baseURL}?record_id=${encodeURIComponent(recordId)}`;
+      form.action = fullURL;
+
+      form.addEventListener("submit", function (e) {
+        if (passwordField.value !== correctPassword) {
+          e.preventDefault();
+          passwordError.style.display = "block";
+        } else {
+          passwordError.style.display = "none";
+        }
+      });
+    }
+  </script>
+</body>
 </html>
